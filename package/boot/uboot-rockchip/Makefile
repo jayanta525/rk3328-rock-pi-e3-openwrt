@@ -46,6 +46,18 @@ define U-Boot/rock-pi-e-rk3328
   OF_PLATDATA:=$(1)
 endef
 
+define U-Boot/rock-pi-e3-rk3328
+  BUILD_SUBTARGET:=armv8
+  NAME:=Rock Pi E3
+  BUILD_DEVICES:= \
+    radxa_rock-pi-e3
+  DEPENDS:=+PACKAGE_u-boot-rock-pi-e3-rk3328:arm-trusted-firmware-rockchip
+  PKG_BUILD_DEPENDS:=arm-trusted-firmware-rockchip
+  ATF:=rk3328_bl31.elf
+  OF_PLATDATA:=$(1)
+  OF_BLOB:=$(1)
+endef
+
 # RK3399 boards
 
 define U-Boot/rock-pi-4-rk3399
@@ -72,6 +84,7 @@ UBOOT_TARGETS := \
   rock-pi-4-rk3399 \
   rockpro64-rk3399 \
   rock-pi-e-rk3328 \
+  rock-pi-e3-rk3328 \
   nanopi-r2s-rk3328
 
 UBOOT_CONFIGURE_VARS += USE_PRIVATE_LIBGCC=yes
@@ -95,9 +108,22 @@ endif
 endef
 
 define Build/InstallDev
+
+ifneq ($(OF_BLOB),)
+	$(CP) $(PKG_BUILD_DIR)/blobs/$(OF_BLOB)/idbloader.bin $(PKG_BUILD_DIR)/idbloader.bin
+	$(CP) $(PKG_BUILD_DIR)/blobs/$(OF_BLOB)/uboot.img $(PKG_BUILD_DIR)/uboot.img
+	$(CP) $(PKG_BUILD_DIR)/blobs/$(OF_BLOB)/trust.bin $(PKG_BUILD_DIR)/trust.bin
+
+	$(INSTALL_DIR) $(STAGING_DIR_IMAGE)	
+	$(CP) $(PKG_BUILD_DIR)/idbloader.bin $(STAGING_DIR_IMAGE)/$(BUILD_VARIANT)-idbloader.bin
+	$(CP) $(PKG_BUILD_DIR)/uboot.img $(STAGING_DIR_IMAGE)/$(BUILD_VARIANT)-uboot.img
+	$(CP) $(PKG_BUILD_DIR)/trust.bin $(STAGING_DIR_IMAGE)/$(BUILD_VARIANT)-trust.bin
+else
 	$(INSTALL_DIR) $(STAGING_DIR_IMAGE)
 	$(CP) $(PKG_BUILD_DIR)/idbloader.img $(STAGING_DIR_IMAGE)/$(BUILD_VARIANT)-idbloader.img
 	$(CP) $(PKG_BUILD_DIR)/u-boot.itb $(STAGING_DIR_IMAGE)/$(BUILD_VARIANT)-u-boot.itb
+endif
+
 endef
 
 define Package/u-boot/install/default
