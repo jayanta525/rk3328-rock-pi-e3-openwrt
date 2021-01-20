@@ -35,6 +35,17 @@ define U-Boot/nanopi-r2s-rk3328
   OF_PLATDATA:=$(1)
 endef
 
+define U-Boot/rock-pi-e3-rk3328
+  BUILD_SUBTARGET:=armv8
+  NAME:=Rock Pi E3
+  BUILD_DEVICES:= \
+    radxa_rock-pi-e3
+  DEPENDS:=+PACKAGE_u-boot-rock-pi-e3-rk3328:arm-trusted-firmware-rockchip
+  PKG_BUILD_DEPENDS:=arm-trusted-firmware-rockchip
+  ATF:=rk3328_bl31.elf
+  OF_PLATDATA:=$(1)
+endef
+
 
 # RK3399 boards
 
@@ -60,6 +71,7 @@ endef
 
 UBOOT_TARGETS := \
   rock-pi-4-rk3399 \
+  rock-pi-e3-rk3328 \
   rockpro64-rk3399 \
   nanopi-r2s-rk3328
 
