@@ -32,3 +32,13 @@ define Device/radxa_rock-pi-4
   IMAGE/sysupgrade.img.gz := boot-common | boot-script | pine64-img | gzip | append-metadata
 endef
 TARGET_DEVICES += radxa_rock-pi-4
+
+define Device/radxa_rock-pi-e3
+  DEVICE_VENDOR := Radxa
+  DEVICE_MODEL := ROCK Pi E3
+  SOC := rk3328
+  UBOOT_DEVICE_NAME := rock-pi-e3-rk3328
+  IMAGE/sysupgrade.img.gz := boot-common | boot-script nanopi-r2s | pine64-img | gzip | append-metadata
+  DEVICE_PACKAGES := kmod-switch-rtl8366-smi kmod-switch-rtl8367b swconfig
+endef
+TARGET_DEVICES += radxa_rock-pi-e3 

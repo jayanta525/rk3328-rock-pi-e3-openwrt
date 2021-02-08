@@ -11,6 +11,10 @@ rockchip_setup_interfaces()
 	friendlyarm,nanopi-r2s)
 		ucidef_set_interfaces_lan_wan 'eth1' 'eth0'
 		;;
+	radxa,rock-pi-e3)
+		ucidef_add_switch "switch0" \
+			"1:lan" "2:lan" "0:wan" "7@eth0"
+		;;
 	*)
 		ucidef_set_interface_lan 'eth0'
 		;;
